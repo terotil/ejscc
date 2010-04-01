@@ -1,0 +1,525 @@
+                                     ejscc
+
+  Tero Tilus
+
+   Distance-learning designer
+   Jyva:skyla: open university
+
+   $Date: 2002/07/23 13:28:51 $
+
+   A program to compile Extended Java Sketchpad Constructions to ordinary
+   syntax
+
+     ----------------------------------------------------------------------
+
+   Table of Contents
+
+   1. Introduction
+
+                1.1. Motivation
+
+                1.2. Terminology
+
+   2. How to use ejscc
+
+                2.1. Obtain
+
+                2.2. Compile
+
+                2.3. Install
+
+                2.4. Manual page
+
+                2.5. Tips and tricks
+
+   3. Language reference
+
+                3.1. Syntax
+
+                3.2. Variables
+
+                3.3. Nested constructions
+
+                3.4. User defined constructions
+
+   A. Appendices
+
+                A.1. License agreement
+
+                A.2. Trademarks
+
+                                1. Introduction
+
+1.1. Motivation
+
+   JavaSketchpad http://www.keypress.com/sketchpad/java_gsp/index.html from
+   Key Curriculum Press(R) is an applet that lets you interact with sketches
+   from The Geometer's Sketchpad(R) on the Internet. The Geometer's Sketchpad
+   is a Dynamic Geometry(R) exploration environment available for
+   Macintosh(R) and PC computers.
+
+   Non-commercial usage of JavaSketchpad is free. A quote from
+   www.keypress.com: "Right is granted to freely use the JavaSketchpad applet
+   in your own Web pages, provided you do so for non-commercial use only.
+   Other permissions or rights to JavaSketchpad require a written agreement
+   letter from Key Curriculum Press."
+
+   Constructions for JavaSketchpad can be created either with Geometer's
+   Sketchpad (must be purchased) or by manually typing construction in
+   JavaSketchpad's construction language. Sad thing is that the construction
+   language isn't particularily good for real-life use. In fact it's pretty
+   bad, and it's clearly designed to be script-generated (not manually
+   written) language. Again quote from www.keypress.com: "Better than typing
+   in lengthy constructions by hand, you can teach programs you've written
+   yourself (in C, in Hypertalk, in Mathematica, in Lisp, in Perl...wherever)
+   to spit out their results in the JavaSketchpad specification language."
+
+   Now ejscc knocks on the door... It helps JavaSketchpad programming by
+   introducing more powerfull language (as an extension to original) for
+   constructions and acting as a compiler (ejscc stands for Extended
+   JavaSketchpad Construction Compiler) from extended syntax to ordinary
+   constructions.
+
+     ----------------------------------------------------------------------
+
+1.2. Terminology
+
+   jsc. JavaSketchpad's construction spesification language and scripts
+   written with it are refered as jsc. The context where the term is used,
+   gives you the exact meaning.
+
+   ejsc. Extended JavaSketchpad construction spesification language and
+   scripts written with it are refered as ejsc. The context where the term is
+   used, gives you the exact meaning.
+
+   construction. In jsc and ejsc term construction appears in roughly the
+   same places where a programmer normally would talk about functions or
+   procedures. Constructions are the building blocks of sketches. A sketch
+   presenting a triangle needs six constructions: three points (vertices) and
+   three segments (edges). In jsc a basic set is available. (point, segment,
+   circle, line, perpendicular, intersection, etc.) In ejsc you can define
+   your own constructions using constructions from the built in basic set and
+   other user defined constructions.
+
+     ----------------------------------------------------------------------
+
+                              2. How to use ejscc
+
+2.1. Obtain
+
+   You can get the latest version of ejscc from
+   http://www.math.jyu.fi/~terotil/. If you are not going to modify compiler
+   and you can find binary package suitable for you, you can skip "Compile"
+   section. Extract package.
+
+     ----------------------------------------------------------------------
+
+2.2. Compile
+
+   C-compiler, GNU make and a little bit of luck is all you need. Make sure
+   you have obtained and extracted source (not binary) package, change to
+   source directory and issue command 'make'. If you didn't get any errors
+   you should have executable file 'ejscc' in your source directory.
+   Compilation may produce some "Defined but not used" -errors, but don't
+   wory about them. You can experiment with options found and described in
+   ./Makefile.
+
+   C-compiler is needed because ejscc is written in C. Compilation script
+   requires GNU make. You can very well compile without make. Borrow compile
+   commands from Makefile.
+
+   If you are going to modify compiler you are very likely to need (f)lex and
+   yacc (or bison) too. Lexical analyser ejsc_lexer.c is generated with
+   (f)lex from ejsc_parser.lex and yacc/bison generates parser ejsc_parser.c
+   from ejsc_parser.y.
+
+     ----------------------------------------------------------------------
+
+2.3. Install
+
+   Just copy ejscc executable to your path.
+
+     ----------------------------------------------------------------------
+
+2.4. Manual page
+
+   Table of Contents
+
+   ejscc -- A program to compile Extended Java Sketchpad Constructions to
+   ordinary syntax.
+
+                                     ejscc
+
+Name
+
+   ejscc -- A program to compile Extended Java Sketchpad Constructions to
+   ordinary syntax.
+
+Synopsis
+
+   ejscc [option...] [-o outputfile] [inputfile]
+
+Description
+
+   Extended Java Sketchpad Construction Compiler (ejscc) compiles extended
+   Java Sketchpad constructions to ordinary syntax (referred as jsc). Command
+   line options are:
+
+   -o outputfile
+
+           Specify the name of the file where the compiled script should be
+           written. If -o option is not given or the filename is - (dash)
+           compiled output is written to standard output.
+
+   inputfile
+
+           Specify the name of file where the source should be read from. If
+           inputfile is not given or the filename is - (dash) source is read
+           from standard input.
+
+   -p
+
+           Do preprocessing with C preprocessor (only when using file input)
+
+   -D
+
+           Enable debugging mode (available if debugging was compiled in).
+
+   -h
+
+           Print command synopsis and exit.
+
+   -V
+
+           Print version number and exit.
+
+     ----------------------------------------------------------------------
+
+2.5. Tips and tricks
+
+   Ejscc can use C preprocessor to perform preprocessing (includes, keyword
+   substitution macros, etc.). If you want to use this feature, ejscc must be
+   able to ivoke cpp -E -o preprocessed.file input.file.
+
+   You can simplify web-deployment with a CGI-script or SSI to combine
+   webpage and compiled ejsc or by using henkari website framework (available
+   in http://www.math.jyu.fi/~terotil/), which -- among many other things --
+   supports on-demand compiling and embedding of ejsc.
+
+     ----------------------------------------------------------------------
+
+                             3. Language reference
+
+   This section is Extended Java Sketchpad Construction reference manual.
+
+   JavaSketchpad Construction (refered as jsc in this document) Grammar can
+   be found from http://www.keypress.com/sketchpad/java_gsp/dr_grammar.html.
+   Only the extensions to jsc are covered here.
+
+     ----------------------------------------------------------------------
+
+3.1. Syntax
+
+   As the name gives you to understand, ejsc is an extension to jsc. Valid
+   jsc script is a valid ejsc script too. All jsc scripts compile with ejscc
+   and produce (pretty printed version of) the same script.
+
+   As an extension to jsc constructions aren't required to be written on
+   single line. In addition to newlines, they can contain tabs and spaces
+   too. The following ejsc scripts, this:
+
+     Point   ( 15 , 30 )   [ hidden ] ; { Pointy point }                      
+
+   and this:
+
+   Point(                                                                     
+         15,     { x-coordinate }                                             
+         30      { y-coordinate }                                             
+        )                                                                     
+        [                                                                     
+         hidden  { hide this point }                                          
+        ];                                                                    
+   { A TRULY pointy point }                                                   
+
+   produce exactly the same result. The jsc resulting from the compilation
+   looks like this:
+
+   {  1} Point(15,30)[hidden];                                                
+
+   Identifiers (variable and construction names) are case-sensitive. They
+   must begin with letter and end with number or letter. Allowed characters
+   are numbers, letters, underscore '_', space ' ', slash '/' and ampersand
+   '&'.
+
+   Personal opinion: Allowing space doesn't do any good and the designer
+   really should be punished because of the construction names containing
+   slashes and ampersands...
+
+   In addition to jsc's curly braces there are C(++) style // and /* */
+   comments and shellscript style # comment available too. Everything from
+   opening curly brace to the first closing curly brace is discarded when
+   compiling. The same holds for /* (opening) and */ (closing). These are
+   block comments. The other two (// and #) are so called line comments.
+   Everything from either of previous up to the next end of line is discarded
+   during compile.
+
+   { This is                                                                  
+     commented out. }                                                         
+   // And this too.                                                           
+   /* You won't see neither // this { nor this }                              
+      in compiled version */                                                  
+   { This is */ invisible too, // and this. }                                 
+
+   Same type of block comments cannot be nested, but different types can.
+
+   { This is commented                                                        
+   { This is commented too,                                                   
+     but this block comment ends here.  --> }                                 
+     This is not commented anymore, and causes syntax error. }                
+                                                                              
+   /* This is commented                                                       
+      { and this }                                                            
+      and this too */                                                         
+                                                                              
+   { This is commented                                                        
+     /* and this */                                                           
+     and this too }                                                           
+
+   It should be noted that # comments are supported to achieve compatibility
+   with C preprocessor. Using them when writing ejsc is not recommended and
+   causes preprocessing errors. When writing comments prefer {}, use // where
+   you need line comments, /* */ when temporarily commenting out large
+   portions of code and never #.
+
+   Comments are allowed between constructions and assignments and in
+   parameter and format lists, but not in the middle of names and numbers or
+   between (format|parameter)lists, list and construction name, variable name
+   and equal sign. Illegal comments (causing syntax error) are marked with
+   {i} and legal with {l}
+
+   {l} Point on {i}object{i}({l}15{l},{l} 0.5){i}[hidden]{l};{l}              
+
+     ----------------------------------------------------------------------
+
+3.2. Variables
+
+   Variables are symbolic names of constructions and numeric/string
+   constants. Variables are not typed. Value of variable is set with
+   assignment operator '='.
+
+   variablename = variablevalue ;                                             
+
+   Assignments are done during parse in the order they appear. So you can use
+   variables before assignment appears in the script. And if there's multiple
+   assignments to same varable, the last one wins and the others have no
+   effect. Be warned: Don't count on this! Assignment handling is going to
+   change.
+
+   During compilation all identifiers found are substituted with values of
+   corresponding variables. If an identifier having no corresponding variable
+   (no variable with the same name than the identifier is defined) is
+   encountered it's left as is. Value of numeric/string constant is the
+   number/string in question. Value of construction is the sequence number of
+   the construction in resulting jsc script.
+
+   The following ejsc script
+
+   { Center point coordinates }                                               
+   center_x = 100;                                                            
+   center_y = 100;                                                            
+                                                                              
+   { Pass through point coordinates }                                         
+   circle_x = 150;                                                            
+   circle_y = 100;                                                            
+                                                                              
+   { Define points }                                                          
+   point_label = 'Example point';                                             
+   p1 = Point(center_x, center_y)[label(point_label)];                        
+   p2 = Point(circle_x, circle_y)[label(point_label)];                        
+                                                                              
+   { Define circle }                                                          
+   Circle(p1,p2);                                                             
+                                                                              
+   { Define radius-segment }                                                  
+   Segment(p1,p2);                                                            
+
+   compiles into the following jsc script:
+
+   {  1} Point(100,100)[label('Example point')];                              
+   {  2} Point(150,100)[label('Example point')];                              
+   {  3} Circle(1,2);                                                         
+   {  4} Segment(1,2);                                                        
+
+   First line of the result comes from line 11 of source (p1 = Poin...).
+   Identifiers center_x, center_y and point_label are substituted with the
+   values of corresponding variables. Comment containing sequence number of
+   the construction is inserted at the beginning of the line to ensure
+   minimal readability of the compiled script. Second line of the result is
+   produced the same way than the first. Third line comes from line 15 of
+   source (Circ...). Identifiers p1 and p2 are replaced with the values of
+   corresponding variables. Construction whose value was assigned to p1
+   resulted in construction having sequence number 1, so the value of p1 is
+   1. For p2 (and in fact for the 4th line of output too) the reasoning goes
+   (as one would expect) exactly the same way.
+
+   Recursive definitions are not allowed, even if the definition could in
+   some cases possibly be resolved.
+
+   a = b;                                                                     
+   b = a;                                                                     
+
+   Causes
+
+   Fatal error: Recursive definition of 'a'.                                  
+
+     ----------------------------------------------------------------------
+
+3.3. Nested constructions
+
+   Constructions can be nested to avoid unneeded references.
+
+   { Nested constructions }                                                   
+   Intersect1(Line(Point(20,20),Point(30,30)),                                
+              Circle(Point(20,20),Point(30,30)));                             
+
+   Compiles to
+
+   {  1} Point(20,20);                                                        
+   {  2} Point(30,30);                                                        
+   {  3} Line(1,2);                                                           
+   {  4} Point(20,20);                                                        
+   {  5} Point(30,30);                                                        
+   {  6} Circle(4,5);                                                         
+   {  7} Intersect1(3,6);                                                     
+
+     ----------------------------------------------------------------------
+
+3.4. User defined constructions
+
+   You can define your own constructions. Form of the construction definition
+   is the following:
+
+ConstructionName(param1, param2, ...) begin;                                           
+        Construction1(...);                                                            
+        ConstructionName = Construction2(...); { Set the value of this construction. } 
+        ...                                                                            
+end;                                                                                   
+
+   Value of user defined construction is the value of symbol with the same
+   name than the construction in question. Default value (if return variable
+   wasn't set) is the sequence number of the last construction produced by
+   the user defined construction in resulting jsc script.
+
+   InvPoint(x,y) begin;                                                       
+           InvPoint = Point(y,x);                                             
+   end;                                                                       
+                                                                              
+   Circle(InvPoint(2,4),InvPoint(6,8));                                       
+
+   Compiles to
+
+   {  1} Point(4,2);                                                          
+   {  2} Point(8,6);                                                          
+   {  3} Circle(1,2);                                                         
+
+   More complex (and more real-life-like) example (in
+   test/features_user-constructions.ejsc)
+
+   x = 150;                                                                   
+   y = 200;                                                                   
+                                                                              
+   { Construction definition.  Return value is the last construction. }       
+   DiagonalPoint(x) begin;                                                    
+           { Construction in codeblock of construction definition }           
+           Point(x,x);                                                        
+   end;                                                                       
+                                                                              
+   { Multi variable function }                                                
+   Triangle(a,b) begin;                                                       
+           p1 = DiagonalPoint(a);                                             
+           p2 = DiagonalPoint(b);                                             
+           p3 = Point(a,b);                                                   
+           Segment(p1,p2);                                                    
+           Segment(p2,p3);                                                    
+           Segment(p3,p1);                                                    
+   end;                                                                       
+                                                                              
+   { Various calls to single variable construction }                          
+   DiagonalPoint(x);                                                          
+   dp = DiagonalPoint(20);                                                    
+   Circle(dp,                                                                 
+          DiagonalPoint(30));                                                 
+                                                                              
+   { Various calls to multi variable construction }                           
+   Triangle(100,50);                                                          
+   Triangle(x,y);                                                             
+                                                                              
+   { Variables have scopes.  Global x is different from x in                  
+     DiagonalPoint }                                                          
+   Point(y,x);                                                                
+
+   compiles to
+
+   {  1} Point(150,150);                                                      
+   {  2} Point(20,20);                                                        
+   {  3} Point(30,30);                                                        
+   {  4} Circle(2,3);                                                         
+   {  5} Point(100,100);                                                      
+   {  6} Point(50,50);                                                        
+   {  7} Point(100,50);                                                       
+   {  8} Segment(5,6);                                                        
+   {  9} Segment(6,7);                                                        
+   { 10} Segment(7,5);                                                        
+   { 11} Point(200,200);                                                      
+   { 12} Point(150,200);                                                      
+   { 13} Segment(1,11);                                                       
+   { 14} Segment(11,12);                                                      
+   { 15} Segment(12,1);                                                       
+   { 16} Point(200,150);                                                      
+
+   Note that in second call to Triangle the first point created is recognized
+   by ejscc as logically the same than the first construction resulting from
+   DiagonalPoint(x);, because coordinate values come from the same unaltered
+   variable. So that point is used and no new point is produced.
+
+   User defined construction may (or may not) have parameters. In the example
+   abow Triangle had two (a and b) and DiagonalPoint had one (x). When user
+   defined construction is called (used somewhere in code), variables having
+   names given in the definition of construction and values given in the call
+   to construction are defined. Amount of parameters should always be the
+   same in call and in definition. Extra parameters in definition don't
+   produce variables and extra parameters in call are omitted. There's
+   (currently) no way to set a default value to a parameter and optionally
+   omit it from call.
+
+   User defined constructions may have formats, but they don't currently have
+   any effect on anything. They are simply omitted.
+
+     ----------------------------------------------------------------------
+
+                                 A. Appendices
+
+                             A.1. License agreement
+
+   Ejscc is free software; you can redistribute it and/or modify it under the
+   terms of the GNU General Public License as published by the Free Software
+   Foundation; either version 2 of the License, or (at your option) any later
+   version.
+
+   Ejscc is distributed in the hope that it will be useful, but WITHOUT ANY
+   WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+   FOR A PARTICULAR PURPOSE. See the GNU General Public License (in
+   ./COPYING) for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc., 59
+   Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+     ----------------------------------------------------------------------
+
+                                A.2. Trademarks
+
+   Java is a trademark of Sun Microsystems, Inc. The Geometer's Sketchpad and
+   Dynamic Geometry are registered trademarks of Key Curriculum Press.
+   Macintosh is a registered trademark of Apple Computer, Inc. Microsoft
+   Windows is a registered trademark of Microsoft Corp.

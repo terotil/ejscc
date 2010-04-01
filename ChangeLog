@@ -1,0 +1,155 @@
+2002-07-23  Tero Tilus  <terotil@jyu.fi>
+
+	* doc/manual.xml: Manual is now pretty complete.  Minor
+	modifications are sure to appear, but all the major features are
+	now documented.
+
+2002-07-16  Tero Tilus  <terotil@jyu.fi>
+
+	* ejscc.c: Fixed "multiple assignments with same construction as
+	left value" and "global var backdoor".
+
+	* Makefile: Cleaned up release package targets.
+
+2002-07-10  Tero Tilus  <terotil@jyu.fi>
+
+	* ejsc_parser.lex: Added C(++) style //line and /*block*/ comments
+	to help nesting comments and commenting out smaller or larger
+	portions of text.
+
+2002-07-09  Tero Tilus  <terotil@jyu.fi>
+
+	* ejscc.c: Resolved "multiple calls" -bug.  Introduced another
+	one: Variables in "higher" namespaces aren't taken into account
+	when checking if user defined construction should be recursed
+	into.  
+
+	* ejsc_parser.y: Allow more params and syms
+
+2002-06-10  Tero Tilus  <terotil@jyu.fi>
+
+	* ejscc.c: Changed symTable definition to (tSymbol **) to make
+	references to symbols and dynamical symtable allocation possible.
+
+	Various bugfixes
+
+	* ejsc_parser.y: Tuned memory management.
+
+	* ejscc.c: Compiler now detects recursive definitions (and doesn't
+	enter infinite loop).
+
+2002-06-06  Tero Tilus  <terotil@jyu.fi>
+
+	* ejsc_parser.y: Tuned memory management a bit.  Dropping MAXVARS
+	and MAXARGLISTS to more realistic figures helped a lot.
+
+	* ejscc.c: Compiler crashed on parameterized formats.  Fixed.
+
+2002-06-05  Tero Tilus  <terotil@jyu.fi>
+
+	* ejscc.c: Re-emission tracking is now completely rewritten and
+	can _truly_ recognize if a construction has been called with same
+	parameters before and doesn't emit it again.
+
+2002-06-04  Tero Tilus  <terotil@jyu.fi>
+
+	* Makefile: Added new targets: source_release and binary_release.
+	
+	* ejscc: Moved whole the project to CVS version control.
+
+2002-06-03  Tero Tilus  <terotil@jyu.fi>
+
+	* ejscc.c: Fixed bug: '#'-comment didn't work.  It had to be
+	written as separate rule.  I think flex can't handle two or more
+	nested braces correctly.  in ((one)|(two)) two wasn't recognized
+	at all.  Writing them as separate rules solved problem.
+
+2002-05-30  Tero Tilus  <terotil@jyu.fi>
+
+	* Release: 0.1.3
+
+	* Makefile (clean): Cleaning now removes .pp and .jsc -trash from
+	test/ directory.
+
+	* ejscc.c: Fixed bugs: crash on user construction with multiple
+	parameters, broken emission tracking of user constructions.
+
+2002-05-29  Tero Tilus  <terotil@jyu.fi>
+
+	* ejscc.c (EJSCC_VERSION): Promoted version number to 0.1.3
+
+	* ejsc_parser.lex: Using C preprocessor requires lines beginning
+	with '#' to be interpreted as comments.  Added that as an
+	alternative (to {}) comment syntax.
+
+2002-05-27  Tero Tilus  <terotil@jyu.fi>
+
+	* ejscc.c: Implemented file IO and C preprocessor (-p switch).
+
+2002-05-20  Tero Tilus  <terotil@jyu.fi>
+
+	* Release: 0.1.2
+
+	* ejscc.c: Parameters now work in user defined constructions (see
+	test/features_user-constructions.ejsc).  Lengths of parameter
+	lists aren't checked yet.
+
+	* ejsc_parser.lex: Allowed names ending with digit to have spaces
+	'&'s and '_'s in them (ie. x_axis_1 is a valid (identifier) name).
+
+	* ejsc_parser.y: Re-emission tracking is now modified to work with
+	changing parameter list.  This was required to make user functions
+	with parameters work.
+
+	Adjusted definition of 'codeblock' to allow definition on single
+	line by adding ';' between 'begin' and 'construction'.  Now
+	"MyConstruction() begin x=50; end;" is possible.  Previously
+	string after "()" was recognized as name "begin x" and not keyword
+	"begin".  Now it's written "MyConstruction() begin; x=50; end;"
+	and works as it should.
+
+2002-05-15  Tero Tilus  <terotil@jyu.fi>
+
+	* ejscc.c: Calls to user defined constructions work!  Parameters
+	aren't working yet.  Re-emissioin tracking needs polishing to work
+	with functions.
+
+	* ejsc_parser.y: Modified definition of argument list.  Now it can
+	be empty.
+
+	* ejsc_parser.lex: Added code block keywords 'begin' and 'end'.
+	Lexer now recognizes codeblocks and changes currentSym
+	accordingly.  Nested codeblocks don't work yet!
+
+2002-05-14  Tero Tilus  <terotil@jyu.fi>
+
+	* ejsc_parser.lex: Added '&' to valid characters in NAME.
+
+2002-05-13  Tero Tilus  <terotil@jyu.fi>
+
+	* Release: 0.1.1
+
+	* ejsc_parser.lex: Bug that gave "syntax error" on valid syntax
+	appeared not to be bug, but just a plain typo in lexer.  Now
+	digits too (and not only letters) are allowed at the end of names.
+
+	* ejscc.c: Added evalId (and evalId arrays for arguments and
+	formats) to tObject and corresponding code to tOb-branch of
+	compile_ to keep track on the need of re-emission.  At the same
+	time managed to blow up compiler.  Debugging is desperately
+	needed.
+
+	* test/features_demo.ejsc (circle_y): Added some constructions to
+	test optimizations.
+
+2002-05-10  Tero Tilus  <terotil@jyu.fi>
+
+	* README: Added lex and yacc to compile requirements.
+
+	* ejsc_parser.y: Removed "\n" from "construction" rule.
+	Linenumber counter is kept up to date by lexers "Skip whitespace".
+
+	* ChangeLog: Added this changelog.
+
+	* First release (0.1).
+

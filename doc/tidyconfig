@@ -1,0 +1,10 @@
+wrap:			75
+indent:			auto
+indent-spaces:		1
+char-encoding:		ascii
+quote-marks:		yes
+show-warnings:		no
+indent-attributes:	no
+drop-empty-paras:	yes
+quiet:			yes
+error-file:		tidyerrors

@@ -1,0 +1,18 @@
+{ Center point coordinates }
+center_x = 100;
+center_y = 100;
+
+{ Pass through point coordinates }
+circle_x = 150;
+circle_y = 100;
+
+{ Define points }
+point_label = 'Example point';
+p1 = Point(center_x, center_y)[label(point_label)];
+p2 = Point(circle_x, circle_y)[label(point_label)];
+
+{ Define circle }
+Circle(p1,p2);
+
+{ Define radius-segment }
+Segment(p1,p2);

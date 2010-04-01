@@ -1,0 +1,17 @@
+o Assignment operations must not be done during parse! Add
+  'assignment' object (or variable type).
+
+o Would symTable be better to implement as linked list or as array of
+  pointers?  Using more flexible memory allocation would be nice...
+
+o Command-line options
+  - Optional comment stripping/preserving
+
+o Arithmetic (and boolean) expressions
+
+o Control flow constructions
+  - conditioning
+  - loops
+
+o Setting library directories to be passed to cpp via commandline 
+  (cpp -B libdir).

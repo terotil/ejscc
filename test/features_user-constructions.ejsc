@@ -1,0 +1,36 @@
+#define DEFAULT_string_name Features demo - user defined constructions
+#define DEFAULT_appletwidth 300
+#define DEFAULT_appletheight 220
+
+x = 150;
+y = 200;
+
+{ Construction definition.  Return value is the last construction. }
+DiagonalPoint(x) begin;
+	{ Construction in codeblock of construction definition }
+	Point(x,x);
+end;
+
+{ Multi variable function }
+Triangle(a,b) begin;
+	p1 = DiagonalPoint(a); 
+	p2 = DiagonalPoint(b);
+	p3 = Point(a,b);
+	Segment(p1,p2);
+	Segment(p2,p3);
+	Segment(p3,p1);
+end;
+
+{ Various calls to single variable construction }
+DiagonalPoint(x);
+dp = DiagonalPoint(20); 
+Circle(dp,
+       DiagonalPoint(30));
+
+{ Various calls to multi variable construction }
+Triangle(100,50);
+Triangle(x,y);
+
+{ Variables have scopes.  Global x is different from x in
+  DiagonalPoint } 
+Point(y,x);
